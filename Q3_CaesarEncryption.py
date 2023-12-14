@@ -30,7 +30,7 @@ def caesarEncrypt(message, codebook, shift):
                 newidx = i + shift
 
                 #if index too big, loop again through the list
-                if newidx > len(codebook):
+                while newidx > len(codebook):
                     newidx =- len(codebook)
                 encrypted += codebook[newidx]
 
@@ -39,9 +39,7 @@ def caesarEncrypt(message, codebook, shift):
 
 def caesarDecrypt(message, codebook, shift):
     decrypted = ""
-    ##put your code here
     decrypted=caesarEncrypt(message, codebook, -shift)
-    
     
     return decrypted
 
