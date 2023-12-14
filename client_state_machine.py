@@ -133,7 +133,7 @@ class ClientSM:
             if len(my_msg) > 0:     # my stuff going out
                 #encryption
                 encodemsg = codebook.caesarEncrypt(my_msg, self.shift)
-                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":encodemsg}))
+                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":encodemsg+"\n"}))
 
                 if my_msg == 'bye':
                     self.disconnect()
@@ -142,12 +142,14 @@ class ClientSM:
                     
             if len(peer_msg) > 0:    # peer's stuff, coming in
                 peer_msg = json.loads(peer_msg)
+                dmsg = codebook.caesarDecrypt(peer_msg["message"], self.shift)
+
                 if peer_msg["action"] == "connect":
                     self.out_msg += "(" + peer_msg["from"] + " joined)\n"
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
                 else:
-                    self.out_msg += peer_msg["from"] + peer_msg["message"]
+                    self.out_msg += peer_msg["from"] + dmsg + "\n"
 
 
             # Display the menu again
