@@ -142,7 +142,7 @@ class ClientSM:
                     
             if len(peer_msg) > 0:    # peer's stuff, coming in
                 peer_msg = json.loads(peer_msg)
-                dmsg = codebook.caesarDecrypt(peer_msg["message"], self.shift)
+                dmsg = codebook.caesarDecrypt(peer_msg["message"].strip(), self.shift)
 
                 if peer_msg["action"] == "connect":
                     self.out_msg += "(" + peer_msg["from"] + " joined)\n"
