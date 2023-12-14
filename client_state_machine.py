@@ -5,6 +5,7 @@ Created on Sun Apr  5 00:00:32 2015
 """
 from chat_utils import *
 import json
+import caesar_encryption
 
 class ClientSM:
     def __init__(self, s):
