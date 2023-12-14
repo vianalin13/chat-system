@@ -34,6 +34,10 @@ class Server:
         # self.sonnet = pkl.load(self.sonnet_f)
         # self.sonnet_f.close()
         self.sonnet = indexer.PIndex("AllSonnets.txt")
+
+        #userNpasswordlist
+        self.passwordlist = {}
+
     def new_client(self, sock):
         #add to all sockets and to new clients
         print('new client...')
@@ -50,7 +54,15 @@ class Server:
 
                 if msg["action"] == "login":
                     name = msg["name"]
+                    password = msg["password"]
                     
+                    #password check
+                    if name not in self.passwordlist.keys():
+                        self.passwordlist[name]=password
+                    else:
+                        if password!=self.passwordlist[name]:
+                            mysend(sock, json.dumps({"action": "login", "status": "error"}))
+
                     #add password over here
                     #with read a user password bank
                     #if the name isn't in password bank, fail user doesn't exist

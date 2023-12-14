@@ -14,6 +14,7 @@ from tkinter import font
 from tkinter import ttk
 from chat_utils import *
 import json
+from tkinter.messagebox import showerror, showinfo
 
 # GUI class for the chat
 class GUI:
@@ -68,23 +69,47 @@ class GUI:
           
         # set the focus of the curser
         self.entryName.focus()
+
+        #password-------- still need to adjust the position
+        self.labelPassword = Label(self.login,
+                               text = "Password: ",
+                               font = "Helvetica 12")
+          
+        self.labelPassword.place(relheight = 0.2,
+                             relx = 0.1, 
+                             rely = 0.5)
+          
+        # create a entry box for 
+        # tyoing the message
+        self.entryPassword = Entry(self.login, 
+                             font = "Helvetica 14")
+          
+        self.entryPassword.place(relwidth = 0.4, 
+                             relheight = 0.12,
+                             relx = 0.35,
+                             rely = 0.5)
+          
+        # set the focus of the curser
+        self.entryName.focus()
+        
           
         # create a Continue Button 
         # along with action
         self.go = Button(self.login,
                          text = "CONTINUE", 
                          font = "Helvetica 14 bold", 
-                         command = lambda: self.goAhead(self.entryName.get()))
+                         command = lambda: self.goAhead(self.entryName.get(), self.entryPassword.get()))
           
         self.go.place(relx = 0.4,
-                      rely = 0.55)
+                      rely = 0.7)
         self.Window.mainloop()
   
-    def goAhead(self, name):
-        if len(name) > 0:
-            msg = json.dumps({"action":"login", "name": name})
+    def goAhead(self, name, password):
+        if len(name) > 0 and len(password):
+            msg = json.dumps({"action":"login", "name": name, "password": password})
             self.send(msg)
             response = json.loads(self.recv())
+
             if response["status"] == 'ok':
                 self.login.destroy()
                 self.sm.set_state(S_LOGGEDIN)
@@ -95,6 +120,10 @@ class GUI:
                 self.textCons.insert(END, menu +"\n\n")      
                 self.textCons.config(state = DISABLED)
                 self.textCons.see(END)
+
+            elif response["status"] == 'error':
+                showerror(title="Login Error", message="Incorrect password.")
+                return
                 # while True:
                 #     self.proc()
         # the thread to receive messages
