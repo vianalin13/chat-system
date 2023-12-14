@@ -15,6 +15,10 @@ from tkinter import ttk
 from chat_utils import *
 import json
 from tkinter.messagebox import showerror, showinfo
+import random
+
+emojis = ["😊", "🎉", "🌟", "🐱", "🍕", "🚀", "🎈", "🎸", "🌈", "🍩"]
+
 
 # GUI class for the chat
 class GUI:
@@ -46,16 +50,16 @@ class GUI:
                        font = "Helvetica 14 bold")
           
         self.pls.place(relheight = 0.15,
-                       relx = 0.2, 
-                       rely = 0.07)
+                       relx = 0.35, 
+                       rely = 0.1)
         # create a Label
         self.labelName = Label(self.login,
-                               text = "Name: ",
+                               text = "Username: ",
                                font = "Helvetica 12")
           
         self.labelName.place(relheight = 0.2,
-                             relx = 0.1, 
-                             rely = 0.2)
+                             relx = 0.195, 
+                             rely = 0.3)
           
         # create a entry box for 
         # tyoing the message
@@ -64,8 +68,8 @@ class GUI:
           
         self.entryName.place(relwidth = 0.4, 
                              relheight = 0.12,
-                             relx = 0.35,
-                             rely = 0.2)
+                             relx = 0.37,
+                             rely = 0.34)
           
         # set the focus of the curser
         self.entryName.focus()
@@ -76,8 +80,8 @@ class GUI:
                                font = "Helvetica 12")
           
         self.labelPassword.place(relheight = 0.2,
-                             relx = 0.1, 
-                             rely = 0.5)
+                             relx = 0.2, 
+                             rely = 0.45)
           
         # create a entry box for 
         # tyoing the message
@@ -86,8 +90,8 @@ class GUI:
           
         self.entryPassword.place(relwidth = 0.4, 
                              relheight = 0.12,
-                             relx = 0.35,
-                             rely = 0.5)
+                             relx = 0.37,
+                             rely = 0.49)
           
         # set the focus of the curser
         self.entryName.focus()
@@ -96,12 +100,12 @@ class GUI:
         # create a Continue Button 
         # along with action
         self.go = Button(self.login,
-                         text = "CONTINUE", 
+                         text = "continue", 
                          font = "Helvetica 14 bold", 
                          command = lambda: self.goAhead(self.entryName.get(), self.entryPassword.get()))
           
         self.go.place(relx = 0.4,
-                      rely = 0.7)
+                      rely = 0.74)
         self.Window.mainloop()
   
     def goAhead(self, name, password):
@@ -168,16 +172,16 @@ class GUI:
                              padx = 5,
                              pady = 5)
           
-        self.textCons.place(relheight = 0.745,
+        self.textCons.place(relheight = 0.85,
                             relwidth = 1, 
-                            rely = 0.08)
+                            rely = 0.06)
           
         self.labelBottom = Label(self.Window,
                                  bg = "#ABB2B9",
-                                 height = 80)
+                                 height = 45)
           
         self.labelBottom.place(relwidth = 1,
-                               rely = 0.825)
+                               rely = 0.91)
           
         self.entryMsg = Entry(self.labelBottom,
                               bg = "#2C3E50",
@@ -186,10 +190,10 @@ class GUI:
           
         # place the given widget
         # into the gui window
-        self.entryMsg.place(relwidth = 0.74,
-                            relheight = 0.06,
-                            rely = 0.008,
-                            relx = 0.011)
+        self.entryMsg.place(relwidth = 0.67,
+                            relheight = 0.05,
+                            rely = 0.007,
+                            relx = 0.12)
           
         self.entryMsg.focus()
           
@@ -197,14 +201,39 @@ class GUI:
         self.buttonMsg = Button(self.labelBottom,
                                 text = "Send",
                                 font = "Helvetica 10 bold", 
-                                width = 20,
+                                width = 5,
                                 bg = "#ABB2B9",
                                 command = lambda : self.sendButton(self.entryMsg.get()))
           
-        self.buttonMsg.place(relx = 0.77,
-                             rely = 0.008,
-                             relheight = 0.06, 
-                             relwidth = 0.22)
+        self.buttonMsg.place(relx = 0.8,
+                             rely = 0.007,
+                             relheight = 0.05, 
+                             relwidth = 0.18)
+        
+        ## emoji button
+        self.emoji_label = Label(self.Window,
+                         bg="#17202A",
+                         fg="#EAECEE",
+                         font="Helvetica 20 bold",
+                         pady=1)
+        
+        self.emoji_label.place(relx = 0.01,
+                             rely = 0.007,
+                             relheight = 0.05, 
+                             relwidth = 0.1)
+
+        self.buttonemoji = Button(self.labelBottom,
+                                text = "emoji",
+                                font = "Helvetica 10 bold", 
+                                width = 10,
+                                bg = "#ABB2B9",
+                                command=self.display_random_emoji)
+          
+        self.buttonemoji.place(relx = 0.01,
+                             rely = 0.007,
+                             relheight = 0.05, 
+                             relwidth = 0.1)
+        ##
           
         self.textCons.config(cursor = "arrow")
           
@@ -219,6 +248,11 @@ class GUI:
         scrollbar.config(command = self.textCons.yview)
           
         self.textCons.config(state = DISABLED)
+
+    def display_random_emoji(self):
+        random_emoji = random.choice(emojis)
+        self.emoji_label.config(text=random_emoji)
+
   
     # function to basically start the thread for sending messages
     def sendButton(self, msg):
