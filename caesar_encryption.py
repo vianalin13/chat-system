@@ -4,6 +4,7 @@ import string
 class Caesar:
     def __init__(self):
         self.codebook = self.generate_codebook()
+        self.shift = random.randint(1,51)
 
     def generate_codebook(self):
         random.seed("Caesar")
