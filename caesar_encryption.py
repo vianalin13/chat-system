@@ -45,7 +45,7 @@ class Caesar:
 if __name__ == "__main__":
     codebook = Caesar()
     msg = "Hello Kitty!"
-    shift = 3
+    shift = random.randint(1,51)
     encoded = codebook.caesarEncrypt(msg, shift)
     decoded = codebook.caesarDecrypt(encoded, shift)
     print("Origin:", msg)

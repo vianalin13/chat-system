@@ -5,6 +5,7 @@ Created on Sun Apr  5 00:00:32 2015
 """
 from chat_utils import *
 import json
+import random
 import caesar_encryption
 
 class ClientSM:
@@ -14,6 +15,9 @@ class ClientSM:
         self.me = ''
         self.out_msg = ''
         self.s = s
+
+        #encrypt
+        self.shift = 0
 
     def set_state(self, state):
         self.state = state
@@ -123,11 +127,19 @@ class ClientSM:
 #==============================================================================
         elif self.state == S_CHATTING:
             if len(my_msg) > 0:     # my stuff going out
-                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":my_msg}))
+                #encryption
+                self.shift = random.randint(1,51)
+                codebook = caesar_encryption.Caesar()
+                encodemsg = codebook.caesarEncrypt(my_msg, self.shift)
+                
+                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":encodemsg}))
+                
                 if my_msg == 'bye':
                     self.disconnect()
                     self.state = S_LOGGEDIN
                     self.peer = ''
+
+
             if len(peer_msg) > 0:    # peer's stuff, coming in
                 peer_msg = json.loads(peer_msg)
                 if peer_msg["action"] == "connect":
