@@ -26,15 +26,9 @@ class Caesar:
 
 
     def caesarEncrypt(self, message, shift):
-        '''
-        - you can compute the index of a character, or,
-        - you can convert the codebook into a dictionary
-        '''
-        
         encrypted = ""
 
         for letter in message:
-
             #account for the space and punctuations not being changed
             if letter == " " or letter in string.punctuation:
                 encrypted += letter
@@ -42,7 +36,7 @@ class Caesar:
             for i in range(len(self.codebook)):
                 if letter == self.codebook[i]:
                     newidx = i + shift
-
+                    
                     #if index too big, loop again through the list
                     while newidx > len(self.codebook):
                         newidx =- len(self.codebook)
@@ -52,9 +46,7 @@ class Caesar:
 
 
     def caesarDecrypt(self, message, shift):
-        decrypted = ""
         decrypted=self.caesarEncrypt(message, -shift)
-        
         return decrypted
 
 
@@ -63,7 +55,7 @@ if __name__ == "__main__":
     msg = "Hello Kitty!"
     shift = 3
     encoded = codebook.caesarEncrypt(msg, shift)
-    decoded = codebook.caesarDecrypt(msg, shift)
+    decoded = codebook.caesarDecrypt(encoded, shift)
     print("Origin:", msg)
     print("Encoded:", encoded)
     print("Decoded", decoded)
