@@ -51,6 +51,12 @@ class Server:
                 if msg["action"] == "login":
                     name = msg["name"]
                     
+                    #add password over here
+                    #with read a user password bank
+                    #if the name isn't in password bank, fail user doesn't exist
+                    #if the name doesn't match the password, invalid password
+
+                    #elif
                     if self.group.is_member(name) != True:
                         #move socket from new clients list to logged clients
                         self.new_clients.remove(sock)
