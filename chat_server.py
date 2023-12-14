@@ -59,8 +59,9 @@ class Server:
                     #password check
                     if name not in self.passwordlist.keys():
                         self.passwordlist[name]=password
-                    elif password!=self.passwordlist[name]:
-                        mysend(sock, json.dumps({"action": "login", "status": "error"}))
+                    else:
+                        if password!=self.passwordlist[name]:
+                            mysend(sock, json.dumps({"action": "login", "status": "error"}))
                         return
 
                     #add password over here
@@ -69,7 +70,7 @@ class Server:
                     #if the name doesn't match the password, invalid password
 
                     #elif
-                    elif self.group.is_member(name) != True:
+                    if self.group.is_member(name) != True:
                         #move socket from new clients list to logged clients
                         self.new_clients.remove(sock)
                         #add into the name to sock mapping
