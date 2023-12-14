@@ -127,20 +127,19 @@ class ClientSM:
 #==============================================================================
         elif self.state == S_CHATTING:
 
-            #self.shift = random.randint(1,51)
-
+            self.shift = random.randint(1,51)
+            codebook = caesar_encryption.Caesar()
+            
             if len(my_msg) > 0:     # my stuff going out
                 #encryption
-                #codebook = caesar_encryption.Caesar()
-                #encodemsg = codebook.caesarEncrypt(my_msg, self.shift)
-                #mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":encodemsg}))
-                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":my_msg+"\n"}))
+                encodemsg = codebook.caesarEncrypt(my_msg, self.shift)
+                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":encodemsg}))
+
                 if my_msg == 'bye':
                     self.disconnect()
                     self.state = S_LOGGEDIN
                     self.peer = ''
-
-
+                    
             if len(peer_msg) > 0:    # peer's stuff, coming in
                 peer_msg = json.loads(peer_msg)
                 if peer_msg["action"] == "connect":
