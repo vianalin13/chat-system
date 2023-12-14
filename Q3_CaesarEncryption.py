@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Sep  7 09:56:01 2021
-
-@author: bing
-"""
-
 import random
 import string
 
@@ -36,7 +28,7 @@ class Caesar:
             for i in range(len(self.codebook)):
                 if letter == self.codebook[i]:
                     newidx = i + shift
-                    
+
                     #if index too big, loop again through the list
                     while newidx > len(self.codebook):
                         newidx =- len(self.codebook)
