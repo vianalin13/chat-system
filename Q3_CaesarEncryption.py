@@ -18,26 +18,22 @@ def caesarEncrypt(message, codebook, shift):
     '''
     
     encrypted = ""
-    e=[]
 
-    for i in range(len(message)):
-        for k in range(len(codebook)):
-            if message[i]==codebook[k]:
-                e.append(k)
-    for i in range(len(message)):
-        if not message[i].isalpha():
-            e.insert(i,message[i])
+    for letter in message:
 
-    s=len(codebook)-shift-1
-    for i in e:
-        if str(i).isdigit():
-            if i>s:
-                encrypted+=codebook[i-len(codebook)-1+shift]
-            else:
-                encrypted+=codebook[i+shift]
-        else:
-            encrypted+=i
-    
+        #account for the space and punctuations not being changed
+        if letter == " " or letter in string.punctuation:
+            encrypted += letter
+        
+        for i in range(len(codebook)):
+            if letter == codebook[i]:
+                newidx = i + shift
+
+                #if index too big, loop again through the list
+                if newidx > len(codebook):
+                    newidx =- len(codebook)
+                encrypted += codebook[newidx]
+
     return encrypted
 
 
