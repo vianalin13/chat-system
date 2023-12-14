@@ -62,6 +62,7 @@ class Server:
                     else:
                         if password!=self.passwordlist[name]:
                             mysend(sock, json.dumps({"action": "login", "status": "error"}))
+                            return
 
                     #add password over here
                     #with read a user password bank
