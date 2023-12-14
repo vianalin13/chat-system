@@ -16,9 +16,6 @@ class ClientSM:
         self.out_msg = ''
         self.s = s
 
-        #encrypt
-        self.shift = 0
-
     def set_state(self, state):
         self.state = state
 
@@ -127,13 +124,15 @@ class ClientSM:
 #==============================================================================
         elif self.state == S_CHATTING:
 
-            self.shift = random.randint(1,51)
-            codebook = caesar_encryption.Caesar()
+            caesar = caesar_encryption.Caesar()
+            print("shift:" + str(caesar.shift))
             
             if len(my_msg) > 0:     # my stuff going out
                 #encryption
-                encodemsg = codebook.caesarEncrypt(my_msg, self.shift)
-                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":encodemsg+"\n"}))
+                print("original msg:" + my_msg)
+                encodemsg = caesar.caesarEncrypt(my_msg, caesar.shift)
+                print("encrypted msg: " + encodemsg)
+                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":encodemsg}))
 
                 if my_msg == 'bye':
                     self.disconnect()
@@ -142,13 +141,15 @@ class ClientSM:
                     
             if len(peer_msg) > 0:    # peer's stuff, coming in
                 peer_msg = json.loads(peer_msg)
-                dmsg = codebook.caesarDecrypt(peer_msg["message"], self.shift)
 
                 if peer_msg["action"] == "connect":
-                    self.out_msg += "(" + peer_msg["from"] + " joined)\n"
+                    self.out_msg += "(" + peer_msg["from"] + " joined)"
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
                 else:
+                    print("recieved msg: " + peer_msg["message"])
+                    dmsg = caesar.caesarDecrypt(peer_msg["message"].strip(), caesar.shift)
+                    print("decrypted msg: " + dmsg)
                     self.out_msg += peer_msg["from"] + dmsg + "\n"
 
 

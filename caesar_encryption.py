@@ -4,6 +4,7 @@ import string
 class Caesar:
     def __init__(self):
         self.codebook = self.generate_codebook()
+        self.shift = random.randint(1,51)
 
     def generate_codebook(self):
         random.seed("Caesar")
@@ -25,10 +26,11 @@ class Caesar:
             if letter == " " or letter in string.punctuation:
                 encrypted += letter
             
-            for i in range(len(self.codebook)):
-                if letter == self.codebook[i]:
-                    newidx = (i + shift) % len(self.codebook)
-                    encrypted += self.codebook[newidx]
+            else: 
+                for i in range(len(self.codebook)):
+                    if letter == self.codebook[i]:
+                        newidx = (i + shift) % len(self.codebook)
+                        encrypted += self.codebook[newidx]
 
         return encrypted
     
