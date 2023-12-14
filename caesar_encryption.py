@@ -27,27 +27,11 @@ class Caesar:
             
             for i in range(len(self.codebook)):
                 if letter == self.codebook[i]:
-                    newidx = i + shift
-
-                    #if index too big, loop again through the list
-                    while newidx > len(self.codebook):
-                        newidx =- len(self.codebook)
+                    newidx = (i + shift) % len(self.codebook)
                     encrypted += self.codebook[newidx]
 
         return encrypted
-
-
+    
     def caesarDecrypt(self, message, shift):
         decrypted=self.caesarEncrypt(message, -shift)
         return decrypted
-
-
-if __name__ == "__main__":
-    codebook = Caesar()
-    msg = "Hello Kitty!"
-    shift = random.randint(1,51)
-    encoded = codebook.caesarEncrypt(msg, shift)
-    decoded = codebook.caesarDecrypt(encoded, shift)
-    print("Origin:", msg)
-    print("Encoded:", encoded)
-    print("Decoded", decoded)
