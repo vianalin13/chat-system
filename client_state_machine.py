@@ -1,8 +1,3 @@
-"""
-Created on Sun Apr  5 00:00:32 2015
-
-@author: zhengzhang
-"""
 from chat_utils import *
 import json
 import random
@@ -129,9 +124,9 @@ class ClientSM:
             
             if len(my_msg) > 0:     # my stuff going out
                 #encryption
-                print("original msg:" + my_msg)
+                #print("original msg:" + my_msg)
                 encodemsg = caesar.caesarEncrypt(my_msg, caesar.shift)
-                print("encrypted msg: " + encodemsg)
+                #print("encrypted msg: " + encodemsg)
                 mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":encodemsg}))
 
                 if my_msg == 'bye':
@@ -147,9 +142,9 @@ class ClientSM:
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
                 else:
-                    print("recieved msg: " + peer_msg["message"])
+                    #print("recieved msg: " + peer_msg["message"])
                     dmsg = caesar.caesarDecrypt(peer_msg["message"].strip(), caesar.shift)
-                    print("decrypted msg: " + dmsg)
+                    #print("decrypted msg: " + dmsg)
                     self.out_msg += peer_msg["from"] + dmsg + "\n"
 
 

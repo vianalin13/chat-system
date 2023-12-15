@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Apr 30 13:36:58 2021
-
-@author: bing
-"""
-
 # import all the required  modules
 import threading
 import select
