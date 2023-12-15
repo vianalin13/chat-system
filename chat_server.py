@@ -1,9 +1,3 @@
-"""
-Created on Tue Jul 22 00:47:05 2014
-
-@author: alina, zzhang
-"""
-
 import time
 import socket
 import select
@@ -37,7 +31,7 @@ class Server:
         self.sonnet = indexer.PIndex("AllSonnets.txt")
 
         #userNpasswordlist
-        self.passwordlist = {}
+        self.user_and_password = {}
 
     def new_client(self, sock):
         #add to all sockets and to new clients
@@ -87,15 +81,15 @@ class Server:
                     password = msg["password"]
                     
                     #password check
-                    if name not in self.passwordlist.keys():
+                    if name not in self.user_and_password.keys():
                         is_strong, error_list = self.is_password_strong(password)
                         if is_strong:
-                            self.passwordlist[name]=password
+                            self.user_and_password[name]=password
                         else:
                             error_message = self.password_error_message(error_list)
                             mysend(sock, json.dumps({"action": "login", "status": "weak_password","result":error_message}))
                             return
-                    elif password!=self.passwordlist[name]:
+                    elif password!=self.user_and_password[name]:
                         mysend(sock, json.dumps({"action": "login", "status": "error"}))
                         return
                         
