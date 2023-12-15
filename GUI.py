@@ -137,7 +137,8 @@ class GUI:
                 return
             elif response["status"] == "weak_password":
                 error_message = response.get("error", "Invalid password.")
-                showerror(title="Sign Up Error", message = f"Weak password: {error_message}")
+                showerror(title="Sign Up Error", message = "Weak password: "+ error_message)
+                return
                 # while True:
                 #     self.proc()
         # the thread to receive messages
