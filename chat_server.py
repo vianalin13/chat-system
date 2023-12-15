@@ -93,7 +93,7 @@ class Server:
                             self.passwordlist[name]=password
                         else:
                             error_message = self.password_error_message(error_list)
-                            mysend(sock, json.dumps({"action": "login", "status": "weak_password"}))
+                            mysend(sock, json.dumps({"action": "login", "status": "weak_password","result":error_message}))
                             return
                     elif password!=self.passwordlist[name]:
                         mysend(sock, json.dumps({"action": "login", "status": "error"}))

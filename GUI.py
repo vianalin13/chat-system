@@ -136,7 +136,7 @@ class GUI:
                 showerror(title="Login Error", message="Incorrect password.")
                 return
             elif response["status"] == "weak_password":
-                error_message = response.get("error", "Invalid password.")
+                error_message = response.get("result")
                 showerror(title="Sign Up Error", message = "Weak password: "+ error_message)
                 return
                 # while True:
