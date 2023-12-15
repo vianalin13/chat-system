@@ -16,8 +16,13 @@ from chat_utils import *
 import json
 from tkinter.messagebox import showerror, showinfo
 import random
+import datetime
 
-emojis = ["😊", "🎉", "🌟", "🐱", "🍕", "🚀", "🎈", "🎸", "🌈", "🍩"]
+emojis = ["😊", "🎉", "🌟", "🐱", "🍕", "🚀", "🎈", "🎸", "🌈", "🍩","😍","🥰","😋",
+          "😎","🤩","🥳","😭","😡","😱","🙄","😴","😈","🤡","💩","😻","✌️","🐶","🐰",
+          "🐨","🦁","🐷","🐽","🐸","🐣","🦄","🦋","🦕","🦖","🐙","🕊","🎄","☘️","🥀",
+          "🌹","🌸","🌻","🌼","🌙","✨","🔥","☀️","☁️","❄️","🍎","🍉","🍓","🍑","🧀","🍔",
+          "🍟","🍚","🍰","🍪","🍻","🏀","⚽️","🎾","🩰","🎨","🎤","🎧","🎮","🏖","🏔","🎞","💎"]
 
 
 # GUI class for the chat
@@ -109,12 +114,14 @@ class GUI:
         self.Window.mainloop()
   
     def goAhead(self, name, password):
+        
         if len(name) > 0 and len(password):
             msg = json.dumps({"action":"login", "name": name, "password": password})
             self.send(msg)
             response = json.loads(self.recv())
 
             if response["status"] == 'ok':
+                
                 self.login.destroy()
                 self.sm.set_state(S_LOGGEDIN)
                 self.sm.set_myname(name)
@@ -134,6 +141,7 @@ class GUI:
             process = threading.Thread(target=self.proc)
             process.daemon = True
             process.start()
+            self.update_time()
   
     # The main layout of the chat
     def layout(self,name):
@@ -146,9 +154,9 @@ class GUI:
                               height = False)
         self.Window.configure(width = 470,
                               height = 550,
-                              bg = "#17202A")
+                              bg = "#66545e")
         self.labelHead = Label(self.Window,
-                             bg = "#17202A", 
+                             bg = "#66545e", 
                               fg = "#EAECEE",
                               text = self.name ,
                                font = "Helvetica 13 bold",
@@ -161,12 +169,12 @@ class GUI:
           
         self.line.place(relwidth = 1,
                         rely = 0.07,
-                        relheight = 0.012)
+                        relheight = 0.002)
           
         self.textCons = Text(self.Window,
                              width = 20, 
                              height = 2,
-                             bg = "#17202A",
+                             bg = "#a39193",
                              fg = "#EAECEE",
                              font = "Helvetica 14", 
                              padx = 5,
@@ -177,14 +185,14 @@ class GUI:
                             rely = 0.06)
           
         self.labelBottom = Label(self.Window,
-                                 bg = "#ABB2B9",
+                                 bg = "#a39193",
                                  height = 45)
           
         self.labelBottom.place(relwidth = 1,
                                rely = 0.91)
           
         self.entryMsg = Entry(self.labelBottom,
-                              bg = "#2C3E50",
+                              bg = "#66545e",
                               fg = "#EAECEE",
                               font = "Helvetica 13")
           
@@ -202,7 +210,7 @@ class GUI:
                                 text = "Send",
                                 font = "Helvetica 10 bold", 
                                 width = 5,
-                                bg = "#ABB2B9",
+                                bg = "#a39193",
                                 command = lambda : self.sendButton(self.entryMsg.get()))
           
         self.buttonMsg.place(relx = 0.8,
@@ -212,8 +220,8 @@ class GUI:
         
         ## emoji button
         self.emoji_label = Label(self.Window,
-                         bg="#17202A",
-                         fg="#EAECEE",
+                         bg="#66545e",
+                         #fg="#EAECEE",
                          font="Helvetica 20 bold",
                          pady=1)
         
@@ -226,13 +234,25 @@ class GUI:
                                 text = "emoji",
                                 font = "Helvetica 10 bold", 
                                 width = 10,
-                                bg = "#ABB2B9",
+                                bg = "#a39193",
                                 command=self.display_random_emoji)
           
         self.buttonemoji.place(relx = 0.01,
                              rely = 0.007,
                              relheight = 0.05, 
                              relwidth = 0.1)
+        ##
+
+        ##display time
+        self.time_label = Label(self.Window,
+                            bg="#66545e",
+                            fg="#EAECEE",
+                            font="Helvetica 12 bold",
+                            pady=5)
+        self.time_label.place(relx=0.87, 
+                              rely=0.007,
+                              relheight = 0.05, 
+                              relwidth = 0.1)
         ##
           
         self.textCons.config(cursor = "arrow")
@@ -249,9 +269,16 @@ class GUI:
           
         self.textCons.config(state = DISABLED)
 
+    #random emoji
     def display_random_emoji(self):
         random_emoji = random.choice(emojis)
         self.emoji_label.config(text=random_emoji)
+
+    #time function
+    def update_time(self):
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        self.time_label.config(text=current_time)
+        self.time_label.after(1000, self.update_time)
 
   
     # function to basically start the thread for sending messages
