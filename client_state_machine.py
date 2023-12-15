@@ -124,7 +124,7 @@ class ClientSM:
             
             if len(my_msg) > 0:     # my stuff going out
                 #encryption
-                print("original msg:" + my_msg)
+                #print("original msg:" + my_msg)
                 self.out_msg += "[" + self.me + "]" + my_msg + "\n"
                 encodemsg = caesar.caesarEncrypt(my_msg, caesar.shift)
                 #print("encrypted msg: " + encodemsg)
