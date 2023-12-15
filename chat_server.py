@@ -14,6 +14,7 @@ import json
 import pickle as pkl
 from chat_utils import *
 import chat_group as grp
+import re
 
 class Server:
     def __init__(self):
@@ -45,6 +46,35 @@ class Server:
         self.new_clients.append(sock)
         self.all_sockets.append(sock)
 
+    #strong password
+    def is_password_strong(self, password):
+        if len(password) < 8:
+            return False, ["Password not long enough, Minimum Length: 8"]
+
+        errors = []
+        if not re.search(r"[A-Z]", password):
+            errors.append("a capital letter")
+        if not re.search(r"[a-z]", password):
+            errors.append("a lowercase letter")
+        if not re.search(r"[0-9!@#$%^&*()_+]", password):
+            errors.append("a number/symbol")
+        
+        if not errors:
+            return True, []
+        else:
+            return False, errors
+        
+    def password_error_message(self, error_list):
+        num_errors = len(error_list)
+        if num_errors == 1 and "not long enough" in error_list[0]:
+            return error_list[0]
+        elif num_errors == 1:
+            return f"Missing {error_list[0]}"
+        elif num_errors == 2:
+            return f"Missing {error_list[0]} and {error_list[1]}"
+        else:
+            return f"Missing {error_list[0]}, {error_list[1]}, and {error_list[2]}"
+
     def login(self, sock):
         #read the msg that should have login code plus username
         try:
@@ -58,7 +88,13 @@ class Server:
                     
                     #password check
                     if name not in self.passwordlist.keys():
-                        self.passwordlist[name]=password
+                        is_strong, error_list = self.is_password_strong(password)
+                        if is_strong:
+                            self.passwordlist[name]=password
+                        else:
+                            error_message = self.password_error_message(error_list)
+                            mysend(sock, json.dumps({"action": "login", "status": "weak_password"}))
+                            return
                     elif password!=self.passwordlist[name]:
                         mysend(sock, json.dumps({"action": "login", "status": "error"}))
                         return
