@@ -120,7 +120,7 @@ class ClientSM:
         elif self.state == S_CHATTING:
 
             caesar = caesar_encryption.Caesar()
-            print("shift:" + str(caesar.shift))
+            #print("shift:" + str(caesar.shift))
             
             if len(my_msg) > 0:     # my stuff going out
                 #encryption
