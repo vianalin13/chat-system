@@ -143,7 +143,7 @@ class ClientSM:
                 peer_msg = json.loads(peer_msg)
 
                 if peer_msg["action"] == "connect":
-                    self.out_msg += "(" + peer_msg["from"] + " joined)"
+                    self.out_msg += "(" + peer_msg["from"] + " joined)" + "\n"
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
                 else:
